@@ -219,7 +219,7 @@ class EstimatedParticle:
 
         # リサンプリング位置の決定
         rng = np.random.default_rng()
-        positions = (np.arange(num_particles) + rng.uniform(0, 1)) / num_particles
+        positions = (np.arange(num_particles) + rng.uniform(0, 1, num_particles)) / num_particles
 
         new_particles: list[Particle] = []
         index = 0
@@ -261,13 +261,12 @@ class EstimatedParticleFactory:
             rng = np.random.default_rng()
             # x = rng.integers(floor_map.get_map_width())
             y = rng.integers(floor_map.get_map_height())
+            # direction = get_random_angle() # 0 ~ 360の範囲でランダムな角度を生成
+ 
             x = 350
             # y = 350
-            if(count == 0):
-                direction = 90
-                count += 1
-            else:
-                direction = get_random_angle() 
+            direction = 0
+            
             weight = 1 / initial_particle_count
 
             if not floor_map.is_inside_floor(x=x, y=y):
