@@ -102,7 +102,10 @@ class TrackingParticle:
                 initial_particle_count=self.initial_particle_count,
             )
             move_estimation_particles.remove_by_floor_map()
-            move_estimation_particles.remove_by_direction(step=position_sample.get_step())
+            move_estimation_particles.remove_by_direction(
+                step=position_sample.get_step(),
+                initial_particle_count = self.initial_particle_count
+                )
             move_estimation_particles.resampling(step=position_sample.get_step(), mode="reversed")
 
             if i % 10 == 0:

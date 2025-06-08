@@ -14,6 +14,7 @@ class Particle:
         weight: float,
         direction: float,
         cluster_id: int = -1,  # クラスタ ID（デフォルトは未分類）
+        initial_particle_count: int = 1000,  # 初期パーティクル数（デフォルトは1000）
         id: str | None = None, # パーティクル ID（デフォルトは未分類）
     ) -> None:
         self.__x = x
@@ -21,6 +22,7 @@ class Particle:
         self.__weight = weight
         self.__direction = direction
         self.__cluster_id = cluster_id  # クラスタ ID を追加
+        self.__initial_particle_count = initial_particle_count  # 初期パーティクル数を保存
         if id is None:
             self.__id = str(uuid.uuid4())
         else:
@@ -97,10 +99,15 @@ class Particle:
     
     
     def move(
-        self, changed_angle: float, step: int, step_error: int, angle_error: int
+        self, 
+        changed_angle: float, 
+        step: int, 
+        step_error: int, 
+        angle_error: int,
+        initial_particle_count: int
     ) -> "Particle":
         # 方向を変更
-        move_direction = self.__direction
+        move_direction = self.__direction + changed_angle + angle_error
         move_direction %= 360  # 0-359度に正規化
 
         # ステップとステップエラーを加算
@@ -118,8 +125,8 @@ class Particle:
             y=move_y, 
             direction=move_direction, 
             weight=self.__weight , 
-            id=self.__id,
-            cluster_id=self.__cluster_id
+            cluster_id=self.__cluster_id,
+            initial_particle_count=self.__initial_particle_count,
             )
 
     def is_straight_direction_to_wall(
@@ -138,7 +145,9 @@ class Particle:
         return False
 
     def is_turn_direction_to_wall(
-        self, step: int, is_inside_floor: Callable[[int, int], bool]
+        self, 
+        step: int, 
+        is_inside_floor: Callable[[int, int], bool], 
     ) -> bool:
         """## 90度回転したパーティクルが壁に埋まっているかを判定する"""
         plus_turn_move_particle = self.move(
@@ -146,12 +155,14 @@ class Particle:
             step=step,
             step_error=0,
             angle_error=PARTICLES_ANGLE_ERROR(),
+            initial_particle_count=self.__initial_particle_count,  
         )
         minus_turn_move_particle = self.move(
             step=step,
             changed_angle=-90,
             step_error=0,
             angle_error=PARTICLES_ANGLE_ERROR(),
+            initial_particle_count= self.__initial_particle_count,
         )
 
         return not is_inside_floor(

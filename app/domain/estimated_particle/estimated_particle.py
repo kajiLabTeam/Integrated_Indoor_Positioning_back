@@ -100,6 +100,7 @@ class EstimatedParticle:
                 changed_angle=changed_angle,
                 step_error=int(random.gauss(0, particle_step_error_sd)),
                 angle_error=int(random.gauss(0, particle_angle_error_sd)),
+                initial_particle_count=initial_particle_count,
             )
             for particle in self.__particle_collection
         ]
@@ -156,7 +157,7 @@ class EstimatedParticle:
 
         self.__particle_collection.pop_all(indexes=remove_particle_indexes)
 
-    def remove_by_direction(self, step: int) -> None:
+    def remove_by_direction(self, step: int, initial_particle_count: int) -> None:
         """## パーティクルの向きが歩行不可能領域を向いている場合、パーティクルを削除する"""
         remove_particle_indexes = []
 
@@ -255,16 +256,15 @@ class EstimatedParticleFactory:
     ) -> EstimatedParticle:
         """## 初期パーティクルを散布する"""
         particle_collection = ParticleCollection()
-        count = 0
 
         while len(particle_collection) < initial_particle_count:
             rng = np.random.default_rng()
             # x = rng.integers(floor_map.get_map_width())
-            y = rng.integers(floor_map.get_map_height())
+            # y = rng.integers(floor_map.get_map_height())
             # direction = get_random_angle() # 0 ~ 360の範囲でランダムな角度を生成
  
             x = 350
-            # y = 350
+            y = 350
             direction = 0
             
             weight = 1 / initial_particle_count
