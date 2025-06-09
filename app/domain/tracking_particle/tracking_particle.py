@@ -106,7 +106,10 @@ class TrackingParticle:
                 step=position_sample.get_step(),
                 initial_particle_count = self.initial_particle_count
                 )
-            move_estimation_particles.resampling(step=position_sample.get_step(), mode="reversed")
+            move_estimation_particles.resampling(
+                step=position_sample.get_step(),
+                initial_particle_count=self.initial_particle_count,
+                mode="reversed")
 
             if i % 10 == 0:
                 # move_estimation_particles.update_weight(likelihood=self.__likelihood, rssi=position_sample.get_rssi1())  # noqa: ERA001, E501

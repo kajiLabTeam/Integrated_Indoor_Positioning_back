@@ -177,9 +177,13 @@ class EstimatedParticle:
         self.__missing_particle_count += len(remove_particle_indexes)
         self.__particle_collection.pop_all(indexes=remove_particle_indexes)
 
-    def resampling(self, step: int, mode: Literal["normal", "reversed"] = "normal") -> None:
+    def resampling(
+            self, 
+            step: int, 
+            initial_particle_count: int = INITIAL_PARTICLES_AMOUNT,
+            mode: Literal["normal", "reversed"] = "normal") -> None:
         """## リサンプリングを実行する"""
-        lost_particle_count = self.__count_lost_particle()
+        lost_particle_count = self.__count_lost_particle(initial_particle_count)
         new_particles: list[Particle] = []
 
         # 没パーティクルが一定数以下になった場合、新たにパーティクルを生成する
@@ -237,8 +241,8 @@ class EstimatedParticle:
         self.__particle_collection.reset()
         self.__particle_collection.add_all(new_particles)
 
-    def __count_lost_particle(self) -> int:
-        return INITIAL_PARTICLES_AMOUNT - len(self.__particle_collection)
+    def __count_lost_particle(self,initial_particle_count: int = INITIAL_PARTICLES_AMOUNT) -> int:
+        return initial_particle_count - len(self.__particle_collection)
 
     def __iter__(self) -> Iterator[Particle]:
         return iter(self.__particle_collection)
