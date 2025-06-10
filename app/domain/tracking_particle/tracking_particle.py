@@ -1,4 +1,5 @@
 from collections.abc import Iterator
+from typing import Optional
 
 from app.config.const.amount import CONVERGENCE_JUDGEMENT_NUMBER
 from app.domain.correct_position.correct_position import CorrectPosition
@@ -23,9 +24,9 @@ class TrackingParticle:
         particle_angle_error_sd: int,
         convergence_judgment_clusters_count: int,
         # initial_particle
-        initial_x: int,
-        initial_y: int,
-        initial_direction: int,
+        initial_x: Optional[int] = None,
+        initial_y: Optional[int] = None,
+        initial_direction: Optional[int] = None,
         # settings
         use_map_matching: bool = False,
         use_fingerprint: bool = False,

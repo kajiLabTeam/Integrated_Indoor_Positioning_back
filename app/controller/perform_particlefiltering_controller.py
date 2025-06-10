@@ -29,9 +29,9 @@ class Settings(BaseModel):
     use_maps_number: int
 
 class Initial_position(BaseModel):
-    initial_x: int
-    initial_y: int
-    initial_direction: int
+    initial_x: Optional[int] = None
+    initial_y: Optional[int] = None
+    initial_direction: Optional[int] = None
     
 
 class PerformParticleFilteringRequest(BaseModel):

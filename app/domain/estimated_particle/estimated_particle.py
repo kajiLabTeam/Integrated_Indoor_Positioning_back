@@ -1,6 +1,7 @@
 import random
 from collections.abc import Iterator
 from typing import Literal
+from typing import Optional
 
 import numpy as np
 
@@ -257,9 +258,9 @@ class EstimatedParticleFactory:
         floor_map: FloorMap,
         initial_position: CorrectPosition,
         initial_particle_count: int,
-        initial_x: int,
-        initial_y: int,
-        initial_direction: int,
+        initial_x: Optional[int],
+        initial_y: Optional[int],
+        initial_direction: Optional[int],   
     ) -> EstimatedParticle:
         """## 初期パーティクルを散布する"""
         particle_collection = ParticleCollection()

@@ -1,6 +1,7 @@
 import time
 from collections.abc import Sequence
 from pathlib import Path
+from typing import Optional
 
 
 from PIL import Image
@@ -40,9 +41,9 @@ def track_ideal(
     display_correct_trajectory: bool,
     display_estimated_trajectory: bool,
     # initial_particle
-    initial_x: int,
-    initial_y: int,
-    initial_direction: int,
+    initial_x: Optional[int] = None,
+    initial_y: Optional[int] = None,
+    initial_direction:  Optional[int] = None,
 
 ) -> None:
     print(f"理想 {floor_map_path} start")  # noqa: T201
@@ -113,9 +114,9 @@ def perform_particle(
     display_estimated_trajectory: bool,
     use_maps_number: int,
     # initial position
-    initial_x: int,
-    initial_y: int,
-    initial_direction: int,
+    initial_x:  Optional[int],
+    initial_y:  Optional[int],
+    initial_direction:  Optional[int],
 ) -> None:
     # 理想の軌跡を生成
     if(use_map_matching == True):
@@ -137,9 +138,9 @@ def perform_particle(
                 display_correct_trajectory=bool(display_correct_trajectory),
                 display_estimated_trajectory=bool(display_estimated_trajectory),
                 # initial_particle
-                initial_x=int(initial_x),
-                initial_y=int(initial_y),
-                initial_direction=int(initial_direction),
+                initial_x=initial_x,
+                initial_y=initial_y,
+                initial_direction=initial_direction,
             )
         
         # ideal_file_count = len(list(Path(IDEAL_IMAGE_PATH).glob("*")))
