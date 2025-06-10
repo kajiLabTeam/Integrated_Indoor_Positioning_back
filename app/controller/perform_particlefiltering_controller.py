@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
+from typing import Optional
 from app.service.perform_particle import perform_particle
 from app.domain.tracking_particle.tracking_particle import TrackingParticle
 import io
@@ -27,12 +28,19 @@ class Settings(BaseModel):
     display_estimated_trajectory: bool
     use_maps_number: int
 
+class Initial_position(BaseModel):
+    initial_x: int
+    initial_y: int
+    initial_direction: int
+    
+
 class PerformParticleFilteringRequest(BaseModel):
     """
     Request model for the perform_particlefiltering_controller
     """
     hyperparameters: Hyperparameters
     settings: Settings
+    initial_position: Initial_position
 
 class PerformParticleFilteringResponse(BaseModel):
     """
@@ -72,6 +80,11 @@ async def perform_particlefiltering(
         display_correct_trajectory=request.settings.display_correct_trajectory,
         display_estimated_trajectory=request.settings.display_estimated_trajectory,
         use_maps_number=request.settings.use_maps_number,
+        # initial_particle
+        initial_x=request.initial_position.initial_x,
+        initial_y=request.initial_position.initial_y,
+        initial_direction=request.initial_position.initial_direction,
+
 
     )
 

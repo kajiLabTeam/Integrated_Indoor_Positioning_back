@@ -22,12 +22,17 @@ class TrackingParticle:
         particle_step_error_sd: int,
         particle_angle_error_sd: int,
         convergence_judgment_clusters_count: int,
+        # initial_particle
+        initial_x: int,
+        initial_y: int,
+        initial_direction: int,
         # settings
         use_map_matching: bool = False,
         use_fingerprint: bool = False,
         use_clusters_color: bool = False,
         display_correct_trajectory: bool = False,
         display_estimated_trajectory: bool = False,
+
         # model_path: str = RSSI_MODEL_PATH,  # noqa: ERA001
     ) -> None:
         self.__coverage_count = 0
@@ -42,6 +47,9 @@ class TrackingParticle:
                 floor_map=floor_map,
                 initial_position=correct_trajectory.get_correct_trajectory()[0],
                 initial_particle_count=initial_particle_count,
+                initial_x=initial_x,
+                initial_y=initial_y,
+                initial_direction=initial_direction,
             )
         ]
         self.__coverage_position: EstimatedPosition | None = None

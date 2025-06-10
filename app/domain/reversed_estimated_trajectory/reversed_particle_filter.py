@@ -51,7 +51,10 @@ class ReversedEstimationParticleFilter:
             )
 
             estimation_particles.remove_by_floor_map()
-            estimation_particles.remove_by_direction(step=reversed_position_sample.get_step())
+            estimation_particles.remove_by_direction(
+                step=reversed_position_sample.get_step(),
+                initial_particle_count=len(estimation_particles.particles)  # or set the correct count as needed
+            )
             # estimation_particles.update_weight()  # noqa: ERA001
             move_estimation_particles.resampling(
                 step=reversed_position_sample.get_step(), mode="reversed"

@@ -180,7 +180,7 @@ class EstimatedParticle:
     def resampling(
             self, 
             step: int, 
-            initial_particle_count: int = INITIAL_PARTICLES_AMOUNT,
+            initial_particle_count: int,
             mode: Literal["normal", "reversed"] = "normal") -> None:
         """## リサンプリングを実行する"""
         lost_particle_count = self.__count_lost_particle(initial_particle_count)
@@ -241,7 +241,7 @@ class EstimatedParticle:
         self.__particle_collection.reset()
         self.__particle_collection.add_all(new_particles)
 
-    def __count_lost_particle(self,initial_particle_count: int = INITIAL_PARTICLES_AMOUNT) -> int:
+    def __count_lost_particle(self,initial_particle_count: int) -> int:
         return initial_particle_count - len(self.__particle_collection)
 
     def __iter__(self) -> Iterator[Particle]:
@@ -257,20 +257,32 @@ class EstimatedParticleFactory:
         floor_map: FloorMap,
         initial_position: CorrectPosition,
         initial_particle_count: int,
+        initial_x: int,
+        initial_y: int,
+        initial_direction: int,
     ) -> EstimatedParticle:
         """## 初期パーティクルを散布する"""
         particle_collection = ParticleCollection()
 
         while len(particle_collection) < initial_particle_count:
             rng = np.random.default_rng()
-            # x = rng.integers(floor_map.get_map_width())
-            # y = rng.integers(floor_map.get_map_height())
-            # direction = get_random_angle() # 0 ~ 360の範囲でランダムな角度を生成
- 
-            x = 350
-            y = 350
-            direction = 0
-            
+            # 初期位置が指定されていない場合はランダムに生成
+            # 指定されている場合はその位置を使用
+            if initial_x is None:
+                x = rng.integers(floor_map.get_map_width())
+            else:
+                x = initial_x
+            if initial_y is None:
+                y = rng.integers(floor_map.get_map_height())
+            else:
+                y = initial_y
+            if initial_direction is None:
+                direction = get_random_angle() # 0 ~ 360の範囲でランダムな角度を生成
+            else:
+                direction = initial_direction
+
+            # パーティクルの重みを初期化
+            # 初期パーティクル数で割ることで、全パーティクルの重みの合計が1になるようにする
             weight = 1 / initial_particle_count
 
             if not floor_map.is_inside_floor(x=x, y=y):

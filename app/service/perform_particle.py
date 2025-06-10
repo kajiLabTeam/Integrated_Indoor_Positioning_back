@@ -2,6 +2,7 @@ import time
 from collections.abc import Sequence
 from pathlib import Path
 
+
 from PIL import Image
 
 from app.config.const.coordinate import (
@@ -38,6 +39,11 @@ def track_ideal(
     use_clusters_color: bool,
     display_correct_trajectory: bool,
     display_estimated_trajectory: bool,
+    # initial_particle
+    initial_x: int,
+    initial_y: int,
+    initial_direction: int,
+
 ) -> None:
     print(f"理想 {floor_map_path} start")  # noqa: T201
     ut = time.time()
@@ -68,6 +74,10 @@ def track_ideal(
         convergence_judgment_clusters_count=convergence_judgment_clusters_count,
         # settings
         #use_fingerprint=use_fingerprint,
+        # initial_particle
+        initial_x=initial_x,
+        initial_y=initial_y,
+        initial_direction=initial_direction,
     )
     tracking_particle.track()
 
@@ -102,6 +112,10 @@ def perform_particle(
     display_correct_trajectory: bool,
     display_estimated_trajectory: bool,
     use_maps_number: int,
+    # initial position
+    initial_x: int,
+    initial_y: int,
+    initial_direction: int,
 ) -> None:
     # 理想の軌跡を生成
     if(use_map_matching == True):
@@ -121,7 +135,11 @@ def perform_particle(
                 #use_fingerprint=bool(use_fingerprint),
                 use_clusters_color=bool(use_clusters_color),
                 display_correct_trajectory=bool(display_correct_trajectory),
-                display_estimated_trajectory=bool(display_estimated_trajectory)
+                display_estimated_trajectory=bool(display_estimated_trajectory),
+                # initial_particle
+                initial_x=int(initial_x),
+                initial_y=int(initial_y),
+                initial_direction=int(initial_direction),
             )
         
         # ideal_file_count = len(list(Path(IDEAL_IMAGE_PATH).glob("*")))
